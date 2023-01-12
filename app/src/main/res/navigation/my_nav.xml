@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/cocktailsFragment">
+
+    <fragment
+        android:id="@+id/cocktailsFragment"
+        android:name="com.example.cocktailbank.ui.fragment.Cocktails.CocktailsFragment"
+        android:label="@string/cocktails"
+        tools:layout="@layout/fragment_cocktails" >
+        <action
+            android:id="@+id/action_cocktailsFragment_to_cocktailsBottomSheet"
+            app:destination="@id/cocktailsBottomSheet" />
+        <argument
+            android:name="backFromBottomSheet"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_cocktailsFragment_to_detailActivity"
+            app:destination="@id/detailActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteCocktailsFragment"
+        android:name="com.example.cocktailbank.ui.fragment.FavoriteCocktails.FavoriteCocktailsFragment"
+        android:label="@string/favorites"
+        tools:layout="@layout/fragment_favorite_cocktails" >
+        <action
+            android:id="@+id/action_favoriteCocktailsFragment_to_detailActivity"
+            app:destination="@id/detailActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/ingredientListFragment"
+        android:name="com.example.cocktailbank.ui.fragment.IngredientList.IngredientListFragment"
+        android:label="@string/ingredient_list"
+        tools:layout="@layout/fragment_ingredient_list" >
+        <action
+            android:id="@+id/action_ingredientListFragment_to_ingredientInfoActivity"
+            app:destination="@id/ingredientInfoActivity" />
+    </fragment>
+    <dialog
+        android:id="@+id/cocktailsBottomSheet"
+        android:name="com.example.cocktailbank.ui.fragment.Cocktails.bottomsheet.CocktailsBottomSheet"
+        android:label="@string/cocktails"
+        tools:layout="@layout/cocktails_bottom_sheet" >
+        <action
+            android:id="@+id/action_cocktailsBottomSheet_to_cocktailsFragment"
+            app:destination="@id/cocktailsFragment"
+            app:popUpTo="@id/cocktailsFragment"
+            app:popUpToInclusive="true" />
+    </dialog>
+    <activity
+        android:id="@+id/detailActivity"
+        android:name="com.example.cocktailbank.ui.DetailActivity"
+        android:label="@string/detail"
+        tools:layout="@layout/activity_detail" >
+        <argument
+            android:name="drink"
+            app:argType="com.example.cocktailbank.models.Drink" />
+    </activity>
+    <activity
+        android:id="@+id/ingredientInfoActivity"
+        android:name="com.example.cocktailbank.ui.IngredientInfoActivity"
+        android:label="@string/ingredient_information"
+        tools:layout="@layout/activity_ingredient_info" >
+        <argument
+            android:name="ingredientName"
+            app:argType="string" />
+    </activity>
+</navigation>

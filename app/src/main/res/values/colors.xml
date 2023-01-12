@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FF9800</color>
+    <color name="colorPrimaryDark">#A33816</color>
+    <color name="colorAccent">#F6DE95</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="lightGray">#F9F9F9</color>
+    <color name="mediumGray">#D1D1D1</color>
+    <color name="lightMediumGray">#80D1D1D1</color>
+    <color name="darkGray">#4B4B4B</color>
+    <color name="dark">#313C44</color>
+    <color name="darker">#151B20</color>
+    <color name="black">#000000</color>
+    <color name="red">#FF4646</color>
+    <color name="yellow">#FFC114</color>
+    <color name="green">#00C980</color>
+
+    <!-- Light theme -->
+
+    <color name="backgroundColor">@color/lightGray</color>
+    <color name="placeHolderColor">@color/mediumGray</color>
+    <color name="vectorColor">@color/darker</color>
+
+    //Custom Chip Style
+    <color name="checkedchipbackgroundcolor">#20FF9800</color>
+    <color name="chipbackgroundcolor">@color/mediumGray</color>
+    <color name="checkedchiptextcolor">@color/colorPrimary</color>
+    <color name="chiptextcolor">@color/darkGray</color>
+
+    //Custom CardView Style
+    <color name="strokeColor">@color/lightMediumGray</color>
+    <color name="cardBackgroundColor">@color/white</color>
+    <color name="cardBackgroundLightColor">#25FF9800</color>
+    <color name="titleColor">@color/darker</color>
+    <color name="descriptionColor">@color/darkGray</color>
+
+    <color name="cardStrokeColor">@color/lightMediumGray</color>
+
+    //Contextual Action Mod
+    <color name="statusBarColor">@color/colorPrimaryDark</color>
+    <color name="contextualStatusBarColor">@color/darker</color>
+    <color name="contextualActionBarColor">@color/dark</color>
+    <color name="actionBarBackgroundColor">@color/colorPrimary</color>
+</resources>
