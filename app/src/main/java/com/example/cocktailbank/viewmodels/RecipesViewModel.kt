@@ -86,8 +86,10 @@ class RecipesViewModel @Inject constructor(
     //For checking network status
     fun showNetworkStatus() {
         if (!networkStatus) {
-            Toast.makeText(application, "No Internet Connection!", Toast.LENGTH_SHORT).show()
-            saveBackOnline(true)
+            if (!backOnline) {
+                Toast.makeText(application, "No Internet Connection!", Toast.LENGTH_SHORT).show()
+                saveBackOnline(true)
+            }
         }
         else if (networkStatus) {
             if (backOnline) {
