@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.navArgs
+import androidx.work.*
 import com.example.cocktailbank.R
 import com.example.cocktailbank.adapters.PagerAdapter
 import com.example.cocktailbank.data.database.entities.FavoriteCocktailsEntity
@@ -19,11 +20,13 @@ import com.example.cocktailbank.ui.fragment.CocktailIngredients.CocktailIngredie
 import com.example.cocktailbank.ui.fragment.CocktailOverview.CocktailOverviewFragment
 import com.example.cocktailbank.util.Constants.Companion.BUNDLE_KEY_1
 import com.example.cocktailbank.util.NetworkResult
+import com.example.cocktailbank.util.RecipeDetailWorker
 import com.example.cocktailbank.viewmodels.MainViewModel
 import com.example.cocktailbank.viewmodels.RecipesViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
@@ -49,6 +52,9 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun requestApiDataById(drink: Drink) {
+        //worker for cache
+        clearCacheWork()
+
         mainViewModel.getRecipeById(recipesViewModel.applyQueriesId(drink.idDrink))
         mainViewModel.recipesResponseById.observe(this) { response ->
             when (response) {
@@ -92,6 +98,28 @@ class DetailActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun clearCacheWork() {
+        val constraints = Constraints.Builder()
+            .setRequiresCharging(false)
+            .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
+            .setRequiresBatteryNotLow(false)
+            .build()
+
+        val clearRequest = PeriodicWorkRequest.Builder(
+            RecipeDetailWorker::class.java,
+            15,
+            TimeUnit.MINUTES
+        ).setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(this)
+            .enqueueUniquePeriodicWork(
+                "clearcache",
+                ExistingPeriodicWorkPolicy.KEEP,
+                clearRequest
+            )
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

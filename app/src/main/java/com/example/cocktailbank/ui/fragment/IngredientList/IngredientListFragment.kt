@@ -47,7 +47,7 @@ class IngredientListFragment : Fragment() {
 
     private fun requestApiIngredientList() {
         mainViewModel.getIngredientList(recipesViewModel.applyQueriesIngredientList())
-        mainViewModel.ingredientListResonse.observe(viewLifecycleOwner) { response ->
+        mainViewModel.ingredientListResponse.observe(viewLifecycleOwner) { response ->
             when(response) {
                 is NetworkResult.Success -> {
                     response.data?.let {

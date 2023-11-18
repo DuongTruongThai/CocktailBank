@@ -6,10 +6,12 @@ import android.net.NetworkCapabilities
 import androidx.lifecycle.*
 import com.example.cocktailbank.MyApplication
 import com.example.cocktailbank.data.Repository
+import com.example.cocktailbank.data.cache.RecipeDetailCache
 import com.example.cocktailbank.data.database.entities.CocktailsEntity
 import com.example.cocktailbank.data.database.entities.FavoriteCocktailsEntity
 import com.example.cocktailbank.models.CocktailsRecipe
 import com.example.cocktailbank.models.IngredientList
+import com.example.cocktailbank.util.Constants
 import com.example.cocktailbank.util.NetworkResult
 import dagger.hilt.android.internal.Contexts
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -55,7 +57,7 @@ class MainViewModel @Inject constructor(
 
     var searchRecipesResponse: MutableLiveData<NetworkResult<CocktailsRecipe>> = MutableLiveData()
 
-    var ingredientListResonse: MutableLiveData<NetworkResult<CocktailsRecipe>> = MutableLiveData()
+    var ingredientListResponse: MutableLiveData<NetworkResult<CocktailsRecipe>> = MutableLiveData()
 
     var searchIngredientResponse: MutableLiveData<NetworkResult<IngredientList>> = MutableLiveData()
 
@@ -80,11 +82,21 @@ class MainViewModel @Inject constructor(
     }
 
     private suspend fun getRecipeByIdSafeCall(queries: Map<String, String>) {
+
+        //Check cache for recipe detail
+        val cache = RecipeDetailCache.recipeDetailMap[queries[Constants.QUERY_ID]]
+        if (cache != null) {
+            recipesResponseById.value = NetworkResult.Success(cache)
+            return
+        }
+
+        //If cache is empty
         recipesResponseById.value = NetworkResult.Loading()
         if (hasInternetConnection()) {
             try {
                 val response = repository.remote.getRecipeById(queries)
                 recipesResponseById.value = handleCocktailsRecipeResponse(response)
+                RecipeDetailCache.recipeDetailMap[queries[Constants.QUERY_ID].toString()] = response.body()!!
             } catch (e: Exception) {
                 recipesResponseById.value = NetworkResult.Error("Recipe Not Found!")
             }
@@ -128,17 +140,17 @@ class MainViewModel @Inject constructor(
     }
 
     private suspend fun getIngredientListSafeCall(queries: Map<String, String>) {
-        ingredientListResonse.value = NetworkResult.Loading()
+        ingredientListResponse.value = NetworkResult.Loading()
         if (hasInternetConnection()) {
             try {
                 val response = repository.remote.getIngredientList(queries)
-                ingredientListResonse.value = handleCocktailsRecipeResponse(response)
+                ingredientListResponse.value = handleCocktailsRecipeResponse(response)
 
             } catch (e: Exception) {
-                ingredientListResonse.value = NetworkResult.Error("Ingredient Not Found!")
+                ingredientListResponse.value = NetworkResult.Error("Ingredient Not Found!")
             }
         } else {
-            ingredientListResonse.value = NetworkResult.Error("No Internet Connection!")
+            ingredientListResponse.value = NetworkResult.Error("No Internet Connection!")
         }
     }
 
